@@ -15,7 +15,7 @@ The goal of this project was to engineer a raw Network Detection and Response (N
 
 ## Setup guide
 
-### 1. Setting up ELK stack
+### 1. [Setting up ELK stack](https://docs.docker.com/get-started/get-docker/)
 
 ELK implementation will be done via docker, as its easy to tear-down and redeploy incase a misconfiguration occurs breaking the installation.
 
@@ -29,7 +29,7 @@ ELK implementation will be done via docker, as its easy to tear-down and redeplo
    ![Elastic login page](/Pictures/Elastic%20dashboard.png)
 4. Credentials are `elastic` and password is `changeme` to log into elastic. The dashboard will be empty because there is no agent collecting the data or shipping events, So next is installation of `suricata` which logs network events.
 
-### 2. Suricata
+### 2. [Suricata](https://docs.suricata.io/en/suricata-8.0.3/install/ubuntu.html)
 
 High-performance, open-source network analysis and threat detection engine that functions as an Intrusion Detection System (IDS), Intrusion Prevention System (IPS), and Network Security Monitoring (NSM) tool.
     
@@ -51,4 +51,21 @@ sudo apt-get install filebeat
 
 1. Starting with its config file `/etc/filebeat/filebeat.yml`, scroll down to `Outputs` section and make the following changes, we uncoment `username` and `password` fields to look like this.
    ![Filebeat Outputs section](/Pictures/Filebeat%20Output.png)
-    Next we enable the suricata in filebeat using the command `sudo filebeat modules enable suricata`. With the module enabled we go to its config file in `/etc/filebeat/modules.d/suricata.yml`, set `enabled: true` and `var.paths: ["/var/log/suricat
+    Next we enable the suricata in filebeat using the command `sudo filebeat modules enable suricata`. With the module enabled we go to its config file in `/etc/filebeat/modules.d/suricata.yml`, set `enabled: true` and `var.paths: ["/var/log/suricata/eve.json"]`.
+   ![Filebeat Suricata module image](/Pictures/Filebeat%20Suricata-Module.png)
+2. Run the command `sudo systemctl enable filebeat` and `sudo systemctl start filebeat` to start filebeat as a service everytime the machine boots up. Restsrat the container using `docker-compose down` and then `docker-compose up -d` in the cloned directory. 
+
+### 4. [Flightsim](https://github.com/alphasoc/flightsim)
+
+Flightsim or Network Flight Simulator is a tool made by AlphaSOC to simulate malicious network traffic to test IDS and other network security devices. 
+
+1. Use `git clone https://github.com/alphasoc/flightsim.git` command to clone the main tool directory from their github page.
+2. `cd` into the directory, as their tool is written in `go-lang` install it with `sudp apt install golang-go`. Next build the tool using the command `go build -o flightsim main.go`, an executable (in green) is created in the directory.
+3. To allow this executable to run globally we move it to `/usr/local/bin` using the command `sudo mv ./flightsim /usr/local/bin/`, this also allows it to run with `sudo` permissions as the same is not possible using alias.
+4. Verify installation using `flightsim --help`. 
+
+### Additional configurations
+
+- Add certain fields like `source.ip`, `destination.ip`, `singature` and `event.type` to show critical details on the dashboard making it readable.
+- In the `suricata.yaml` search for `stats` and `flow` and comment them, because out-of box suricata acts as a NSM or Network Security Monitor logging everything, so we comment out certain logged details that can clear up the dashboard.
+- Use the command `sudo filebeat setup -e` to set up the custom dashboard templates that come filebeat that is best suited for elasticsearch to process.
