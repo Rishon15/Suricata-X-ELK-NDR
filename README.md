@@ -15,7 +15,7 @@ The goal of this project was to engineer a raw Network Detection and Response (N
 
 ## Setup guide
 
-### 1. [Setting up ELK stack](https://docs.docker.com/get-started/get-docker/)
+### 1. Setting up ELK stack
 
 ELK implementation will be done via docker, as its easy to tear-down and redeploy incase a misconfiguration occurs breaking the installation.
 
