@@ -12,7 +12,7 @@ This module simulates an outbound scan from a compromised internal host, done to
 
 ### 2. Problem
 
-On testing out-of-box rules like the Emerging Threats rules, its observed to trigger only when port 22 was probed and not when other ports were probed, proving to have many blidspots. Furthermore, previously devised rules were being triggered due to benign telemetry (Eg - Elastic & Mozilla) causing many flase positives and cluttering the dashboard.
+On testing out-of-box rules like the Emerging Threats rules, its observed to trigger only when port 22 was probed and not when other ports were probed, proving to have many blindspots. Furthermore, previously devised rules were being triggered due to benign telemetry (Eg - Elastic & Mozilla) causing many flase positives and cluttering the dashboard.
 
 ### 3. Solution
 
