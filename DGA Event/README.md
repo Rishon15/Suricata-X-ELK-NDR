@@ -10,6 +10,8 @@ This technique is used by adversary to dynamically identify a C2 server. Generat
 
 ### 2. Problem
 
+![DGA Event Before Rule](../Pictures/DGA-Before.png)
+
 Relying on standard community signatures (Emerging Threats in this case) for DGA detectionoften result in shallow, easilty bypassed alerts, intial observation showed generic rules firing purely on the presence of a specific Top-Level Domain. Writing a broad PCRE (Regex) rule to alert on 1+ character alphanumeric string creates severe false-positive risks on legitimate enterprise domains.
 
 ### 3. Solution
@@ -24,5 +26,7 @@ alert dns $HOME_NET any -> any any (msg:"C2 - Possible DGA Domain Query (.biz/.i
 ```
 
 ### 5. Result
+
+![DGA After Rule](../Pictures/DGA-After.png)
 
 The Suricata engine successfully detected the DGA simulation. Kibana visualization demonstrated critical alert correlation, it successfully identified the random xqhq9bvjfv.info payload, while the previously established HUNTING LEAD rule flagged the programmatic volume of the requests. This validated a layered detection pipeline capable of identifying both the shape and behavior of advanced C2 mechanisms.
